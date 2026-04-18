@@ -1,0 +1,28 @@
+services:
+  factorio:
+    image: factoriotools/factorio:stable
+    container_name: factorio
+    restart: unless-stopped
+    ports:
+      - "34197:34197/udp"   # game traffic
+      - "27015:27015/tcp"   # RCON
+    volumes:
+      - factorio-data:/factorio
+      - ./server-settings.json.tmpl:/templates/server-settings.json.tmpl:ro
+      - ./entrypoint.sh:/entrypoint.sh:ro
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
+    environment:
+      - LOAD_LATEST_SAVE=true
+      - GENERATE_NEW_SAVE=false
+      - SAVE_NAME=default
+      - RCON_PORT=27015
+      - RCON_PASSWORD=${RCON_PASSWORD}
+      - GAME_PASSWORD=${GAME_PASSWORD}
+      - FACTORIO_USERNAME=${FACTORIO_USERNAME}
+      - FACTORIO_PASSWORD=${FACTORIO_PASSWORD}
+      - FACTORIO_TOKEN=${FACTORIO_TOKEN}
+      - SERVER_NAME=${SERVER_NAME}
+      - SERVER_DESCRIPTION=${SERVER_DESCRIPTION}
+
+volumes:
+  factorio-data:
